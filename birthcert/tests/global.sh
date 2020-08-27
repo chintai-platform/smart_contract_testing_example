@@ -15,8 +15,9 @@ clean_exit(){
   time_taken=$1
   close_nodeos
   local exit_code=$(cat tests_failed)
-  echo "</testsuites>" >> $test_report
   sed -i '2i<testsuites id="all_tests" name="Full Test Suite" tests="'$(cat tests_total)'" failures="'$(cat tests_failed)'" time="'$time_taken'">' $test_report
+  sed -i '3i<testsuite id="test_suite" name="Test Suite" tests="'$(cat tests_total)'" failures="'$(cat tests_failed)'" time="'$time_taken'">' $test_report
+  echo '</testsuite> </testsuites>' >> $test_report
   rm -f tests_passed
   rm -f tests_failed
   rm -f tests_total

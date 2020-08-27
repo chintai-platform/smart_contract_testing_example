@@ -13,21 +13,7 @@ run_test_suite(){
   setup_system
   sleep 1
   run_all_unit_tests
-  for job in `jobs -p`
-  do
-    if [[ $job -ne $nodeos_pid ]]
-    then
-      wait $job
-    fi
-  done
   run_all_component_tests
-  for job in `jobs -p`
-  do
-    if [[ $job -ne $nodeos_pid ]]
-    then
-      wait $job
-    fi
-  done
   run_all_integration_tests
   for job in `jobs -p`
   do

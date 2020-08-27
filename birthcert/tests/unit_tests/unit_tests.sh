@@ -2,7 +2,6 @@
 
 function run_all_unit_tests(){
   echo "Running all unit tests"
-  sed -i '3i<testsuite id="unit_test_suite" name="Unit Test Suite" tests="'$(cat tests_total)'" failures="'$(cat tests_failed)'" time="'$time_taken'">' $test_report
   unit_test_validate &
   unit_test_insert &
   unit_test_set_retirement_date &
