@@ -2,10 +2,10 @@
 
 function run_all_unit_tests(){
   echo "Running all unit tests"
-  unit_test_validate
-  unit_test_insert
-  unit_test_set_retirement_date
-  unit_test_calculate_retirement_date
+  unit_test_validate &
+  unit_test_insert &
+  unit_test_set_retirement_date &
+  unit_test_calculate_retirement_date &
 }
 
 function unit_tests_setup()
@@ -21,10 +21,10 @@ function unit_tests_setup()
 
 function unit_test_validate()
 {
-  unit_test_validate_account_doesnt_exist
-  unit_test_validate_invalid_name
-  unit_test_validate_future_birth
-  unit_test_validate_success
+  unit_test_validate_account_doesnt_exist &
+  unit_test_validate_invalid_name         &
+  unit_test_validate_future_birth         &
+  unit_test_validate_success              &
 }
 
 function unit_test_validate_account_doesnt_exist()

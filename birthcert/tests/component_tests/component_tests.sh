@@ -2,14 +2,14 @@
 
 function run_all_component_tests(){
   echo "Running all component tests"
-  component_test_add_birth_certificate
-  component_test_set_retirement_contract
+  component_test_add_birth_certificate &
+  component_test_set_retirement_contract &
 }
 
 function component_test_add_birth_certificate()
 {
-  component_test_add_birth_certificate_wrong_authority
-  component_test_add_birth_certificate_success
+  component_test_add_birth_certificate_wrong_authority &
+  component_test_add_birth_certificate_success &
 }
 
 function component_test_add_birth_certificate_wrong_authority
@@ -100,8 +100,8 @@ function component_test_add_birth_certificate_success
 
 function component_test_set_retirement_contract()
 {
-  component_test_set_retirement_contract_wrong_authority
-  component_test_set_retirement_contract_success
+  component_test_set_retirement_contract_wrong_authority &
+  component_test_set_retirement_contract_success &
 }
 
 function component_test_set_retirement_contract_wrong_authority

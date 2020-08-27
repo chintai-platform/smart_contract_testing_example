@@ -2,12 +2,12 @@
 
 function run_all_integration_tests(){
   echo "Running all integration tests"
-  integration_test_add_birth_certificate
+  integration_test_add_birth_certificate &
 }
 
 function integration_test_add_birth_certificate()
 {
-  integration_test_add_birth_certificate_success
+  integration_test_add_birth_certificate_success &
 }
 
 function integration_test_add_birth_certificate_success
