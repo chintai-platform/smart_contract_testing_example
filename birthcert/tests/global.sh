@@ -29,7 +29,6 @@ clean_exit(){
   local exit_code=$(cat tests_failed)
   echo "</testsuites>" >> $test_report
   sed -i '2i<testsuites id="all_tests" name="Full Test Suite" tests="'$(cat tests_total)'" failures="'$(cat tests_failed)'" time="'$time_taken'">' $test_report
-  sed -i '3i<testsuite id="system_test_suite" name="System Test Suite" tests="'$(cat tests_total)'" failures="'$(cat tests_failed)'" time="'$time_taken'">' $test_report
   rm -f tests_passed
   rm -f tests_failed
   rm -f tests_total
@@ -302,88 +301,6 @@ setup_system_contracts(){
   then
     echo "Failed to set contract boidcomtoken"
   fi
-  result=$( (cleos push action -f boidcomtoken create '[ "boidcomtoken", "10000000000.0000 BOID" ]' -p boidcomtoken) 2>&1)
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to create BOID tokens with boidcomtoken"
-    echo $result
-  fi
-  result=$( (cleos push action -f boidcomtoken issue '[ "boidcomtoken", "1000000000.0000 BOID", "memo" ]' -p boidcomtoken) 2>&1)
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to issue BOID tokens to boidcomtoken"
-    echo $result
-  fi
-
-  result=$( (cleos wallet import --private-key $private_key) 2>&1 )
-  result=$( (cleos system newaccount eosio --transfer dappservices $public_key --stake-net "100000.0000 EOS" --stake-cpu "100000.0000 EOS" --buy-ram "10000 EOS") 2>&1 )
-  result=$( (cleos set account permission dappservices active --add-code) 2>&1 )
-  timeout "cleos set contract dappservices $CHINTAIDEX_DIR/build/bin dappservices.wasm dappservices.abi" 20
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to set contract dappservices"
-  fi
-  result=$( (cleos push action -f dappservices create '[ 100000000000000, 0, 0 ]' -p dappservices) 2>&1)
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to create DAPP tokens with dappservices"
-    echo $result
-  fi
-  result=$( (cleos push action -f dappservices issue '[ "dappservices", "1000000000.0000 DAPP", "memo" ]' -p dappservices) 2>&1)
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to issue DAPP tokens to dappservices"
-    echo $result
-  fi
-  result=$( (cleos system newaccount eosio --transfer chintaidevop $public_key --stake-net "100000.0000 EOS" --stake-cpu "100000.0000 EOS" --buy-ram "10000 EOS") 2>&1 )
-  result=$( (cleos push action -f dappservices regpkg '[{"id":1, "api_endpoint":"myendpoint", "package_json_uri":"myuri", "package_id":"stake", "service":"stakeservice", "provider":"chintaidevop", "quota":"1.0000 QUOTA", "package_period":0, "min_stake_quantity":"0.0001 DAPP", "min_unstake_period":0, "enabled":1}]' -p chintaidevop) 2>&1)
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to register a dapp package"
-    echo $result
-  fi
-  result=$( (cleos system newaccount eosio --transfer provider1 $public_key --stake-net "100000.0000 EOS" --stake-cpu "100000.0000 EOS" --buy-ram "10000 EOS") 2>&1 )
-  result=$( (cleos push action -f dappservices regpkg '[{"id":0, "api_endpoint":"myendpoint", "package_json_uri":"myuri", "package_id":"package1", "service":"ipfsservice1", "provider":"provider1", "quota":"1.0000 QUOTA", "package_period":1, "min_stake_quantity":"500000.0000 DAPP", "min_unstake_period":1, "enabled":1}]' -p provider1) 2>&1)
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to register a dapp package"
-    echo $result
-  fi
-  result=$( (cleos push action -f dappservices enablepkg '[chintaidevop stake stakeservice]' -p chintaidevop) 2>&1)
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to enable a dapp package"
-    echo $result
-  fi
-  result=$( (cleos push action -f dappservices enablepkg '[provider1 package1 ipfsservice1]' -p provider1) 2>&1)
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to enable a dapp package"
-    echo $result
-  fi
-  result=$( (cleos system newaccount eosio --transfer stakeservice $public_key --stake-net "100000.0000 EOS" --stake-cpu "100000.0000 EOS" --buy-ram "10000 EOS") 2>&1 )
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to create stakeservice account"
-    echo $result
-  fi
-  timeout "cleos set contract stakeservice $CHINTAIDEX_DIR/build/bin stakeservice.wasm stakeservice.abi" 20
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to set contract stakeservice"
-  fi
-  result=$( (cleos system newaccount eosio --transfer ipfsservice1 $public_key --stake-net "100000.0000 EOS" --stake-cpu "100000.0000 EOS" --buy-ram "10000 EOS") 2>&1 )
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to create ipfsservice1 account"
-    echo $result
-  fi
-  timeout "cleos set contract ipfsservice1 $CHINTAIDEX_DIR/build/bin ipfsservice1.wasm ipfsservice1.abi" 20
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to set contract ipfsservice1"
-  fi
-
 }
 
 function generate_random_name()
