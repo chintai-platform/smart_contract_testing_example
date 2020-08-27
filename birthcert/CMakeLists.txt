@@ -5,9 +5,9 @@ if(EOSIO_CDT_ROOT STREQUAL "" OR NOT EOSIO_CDT_ROOT)
 endif()
 
 ExternalProject_Add(
-   birthcertusa_project
+   birthcert_project
    SOURCE_DIR ${CMAKE_SOURCE_DIR}/src
-   BINARY_DIR ${CMAKE_BINARY_DIR}/birthcertusa
+   BINARY_DIR ${CMAKE_BINARY_DIR}/birthcert
    CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=${EOSIO_CDT_ROOT}/lib/cmake/eosio.cdt/EosioWasmToolchain.cmake
    UPDATE_COMMAND ""
    PATCH_COMMAND ""

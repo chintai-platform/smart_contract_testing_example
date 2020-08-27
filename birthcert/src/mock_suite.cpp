@@ -2,7 +2,7 @@
 
 #include "mock_suite.hpp"
 #include "certificate.hpp"
-#include "retirement.hpp"
+#include "retirement_contract.hpp"
 
 void mock_suite::mock_certificate_table(uint64_t const certificate_id, eosio::name const & account, std::string const & full_name, eosio::time_point const & date_of_birth)
 {
@@ -20,8 +20,8 @@ void mock_suite::mock_certificate_table(uint64_t const certificate_id, eosio::na
 
 void mock_suite::mock_retirement_table(eosio::name const & account)
 {
-  retirement_table retirement(get_self(), get_self().value);
-  auto addentry = [&](auto & entry) { entry = retirement_t(account);};
+  retirement_contract_table retirement(get_self(), get_self().value);
+  auto addentry = [&](auto & entry) { entry = retirement_contract_t(account);};
   if(retirement.begin() == retirement.end())
   {
     retirement.emplace(get_self(), addentry);

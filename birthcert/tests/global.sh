@@ -413,7 +413,7 @@ function setup_contract()
     echo $result
     return 1
   fi
-  timeout "cleos set contract $contract_name $BIRTH_CERTIFICATE_CONTRACT/build/birthcertusa birthcertusa_local.wasm birthcertusa_local.abi" 20
+  timeout "cleos set contract $contract_name $BIRTH_CERTIFICATE_CONTRACT/build/birthcert birthcert_local.wasm birthcert_local.abi" 20
   result=$( (cleos set account permission $contract_name active --add-code) 2>&1 )
   if [[ $? -ne 0 ]]
   then
@@ -424,7 +424,7 @@ function setup_contract()
   echo $contract_name
 }
 
-function setup_retirementus_contract()
+function setup_retirement_contract()
 {
   local contract_name=$(generate_random_name)
   result=$( (cleos system newaccount eosio $contract_name $public_key --stake-net "100000 EOS" --stake-cpu "100000 EOS" --buy-ram-kbytes 10000) 2>&1)
@@ -434,7 +434,7 @@ function setup_retirementus_contract()
     echo $result
     return 1
   fi
-  timeout "cleos set contract $contract_name $RETIREMENT_CONTRACT/build/retirementus retirementus.wasm retirementus.abi" 20
+  timeout "cleos set contract $contract_name $RETIREMENT_CONTRACT/build/retirement retirement.wasm retirement.abi" 20
   result=$( (cleos set account permission $contract_name active --add-code) 2>&1 )
   if [[ $? -ne 0 ]]
   then
@@ -445,7 +445,7 @@ function setup_retirementus_contract()
   echo $contract_name
 }
 
-function setup_mock_retirementus_contract()
+function setup_mock_retirement_contract()
 {
   local contract_name=$(generate_random_name)
   result=$( (cleos system newaccount eosio $contract_name $public_key --stake-net "100000 EOS" --stake-cpu "100000 EOS" --buy-ram-kbytes 10000) 2>&1)
@@ -455,7 +455,7 @@ function setup_mock_retirementus_contract()
     echo $result
     return 1
   fi
-  timeout "cleos set contract $contract_name $BIRTH_CERTIFICATE_CONTRACT/build/birthcertusa mockretire.wasm mockretire.abi" 20
+  timeout "cleos set contract $contract_name $BIRTH_CERTIFICATE_CONTRACT/build/birthcert mockretire.wasm mockretire.abi" 20
   result=$( (cleos set account permission $contract_name active --add-code) 2>&1 )
   if [[ $? -ne 0 ]]
   then

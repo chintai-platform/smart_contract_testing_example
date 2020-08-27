@@ -1,7 +1,7 @@
 #ifndef REMINDER
 #define REMINDER
 
-class [[eosio::table("reminder"), eosio::contract("retirementus")]] reminder_t
+class [[eosio::table("reminder"), eosio::contract("retirement")]] reminder_t
 {
   private:
     eosio::name account;

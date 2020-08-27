@@ -13,13 +13,13 @@ function integration_test_add_birth_certificate()
 function integration_test_add_birth_certificate_success
 {
   local start_time=$(date +%s.%3N)
-  birthcertusa=$(unit_tests_setup)
+  birthcert=$(unit_tests_setup)
   if [[ $? -ne 0 ]]
   then
-    test_fail "${FUNCNAME[0]}: Failed to set up birthcertusa contract: $result"
+    test_fail "${FUNCNAME[0]}: Failed to set up birthcert contract: $result"
     return 1
   fi
-  retirement_contract=$(setup_retirementus_contract)
+  retirement_contract=$(setup_retirement_contract)
   if [[ $? -ne 0 ]]
   then
     test_fail "${FUNCNAME[0]}: Failed to create the retirement contract"
@@ -32,14 +32,14 @@ function integration_test_add_birth_certificate_success
   date_of_birth="1990-01-01T00:00:00.000"
   retirement_date="2054-12-16T00:00:00.000"
 
-  result=$( (cleos push action -f $birthcertusa setretire "{\"account\":\"$retirement_contract\"}" -p $birthcertusa) 2>&1)
+  result=$( (cleos push action -f $birthcert setretire "{\"account\":\"$retirement_contract\"}" -p $birthcert) 2>&1)
   if [[ $? -ne 0 ]]
   then
     test_fail "${FUNCNAME[0]}: setretire action failed unexpectedly: $result"
     return 1
   fi
 
-  result=$( (cleos push action -f $retirement_contract authority "{\"account\":\"$birthcertusa\"}" -p $retirement_contract) 2>&1)
+  result=$( (cleos push action -f $retirement_contract authority "{\"account\":\"$birthcert\"}" -p $retirement_contract) 2>&1)
   if [[ $? -ne 0 ]]
   then
     test_fail "${FUNCNAME[0]}: authority action failed unexpectedly: $result"
@@ -47,14 +47,14 @@ function integration_test_add_birth_certificate_success
   fi
 
 
-  result=$( (cleos push action -f $birthcertusa add "{\"certificate_id\":$certificate_id, \"account\":\"$account\", \"full_name\":\"$full_name\", \"date_of_birth\":\"$date_of_birth\"}" -p $birthcertusa) 2>&1)
+  result=$( (cleos push action -f $birthcert add "{\"certificate_id\":$certificate_id, \"account\":\"$account\", \"full_name\":\"$full_name\", \"date_of_birth\":\"$date_of_birth\"}" -p $birthcert) 2>&1)
   if [[ $? -ne 0 ]]
   then
     test_fail "${FUNCNAME[0]}: add action failed when it should have succeeded: $result"
     return 1
   fi
 
-  certificate=$( (cleos get table $birthcertusa $birthcertusa certificates | jq -r ".rows[0]") 2>&1)
+  certificate=$( (cleos get table $birthcert $birthcert certificates | jq -r ".rows[0]") 2>&1)
   observed_certificate_id=$(echo $certificate | jq -r .certificate_id)
   observed_account=$(echo $certificate | jq -r .account)
   observed_full_name=$(echo $certificate | jq -r .full_name)

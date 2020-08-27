@@ -1,7 +1,7 @@
 #ifndef AUTHORITY
 #define AUTHORITY
 
-class [[ eosio::table("authority"), eosio::contract("retirementus") ]] authority_t
+class [[ eosio::table("authority"), eosio::contract("retirement") ]] authority_t
 {
   private:
     eosio::name account;

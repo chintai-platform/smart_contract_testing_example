@@ -1,11 +1,11 @@
 #ifndef BIRTH_CERTIFICATE_CONTRACT
 #define BIRTH_CERTIFICATE_CONTRACT
 
-#include "retirementus.hpp"
+#include "retirement.hpp"
 
 #include <eosio/eosio.hpp>
 
-class [[eosio::contract("birthcertusa")]] birthcertusa : public eosio::contract
+class [[eosio::contract("birthcert")]] birthcert : public eosio::contract
 {
   protected:
     void validate(eosio::name const & account, std::string const & full_name, eosio::time_point const & date_of_birth);
@@ -18,10 +18,10 @@ class [[eosio::contract("birthcertusa")]] birthcertusa : public eosio::contract
     using eosio::contract::contract;
 
     [[eosio::action("add")]] void add_birth_certificate(uint64_t const certificate_id, eosio::name const & account, std::string const & full_name, eosio::time_point const & date_of_birth);
-    using add_action = eosio::action_wrapper<"add"_n, &birthcertusa::add_birth_certificate>;
+    using add_action = eosio::action_wrapper<"add"_n, &birthcert::add_birth_certificate>;
 
     [[eosio::action("setretire")]] void set_retirement_contract(eosio::name const & account);
-    using setretire_action = eosio::action_wrapper<"setretire"_n, &birthcertusa::set_retirement_contract>;
+    using setretire_action = eosio::action_wrapper<"setretire"_n, &birthcert::set_retirement_contract>;
 };
 
 #endif

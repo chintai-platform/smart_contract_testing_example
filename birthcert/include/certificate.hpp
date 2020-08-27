@@ -1,7 +1,7 @@
 #ifndef CERTIFICATE
 #define CERTIFICATE
 
-class [[eosio::table("certificate"), eosio::contract("birthcertusa")]] certificate_t
+class [[eosio::table("certificate"), eosio::contract("birthcert")]] certificate_t
 {
   private:
     uint64_t certificate_id;

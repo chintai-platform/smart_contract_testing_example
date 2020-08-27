@@ -1,8 +1,8 @@
-#include <retirementus.hpp>
+#include <retirement.hpp>
 #include "authority.hpp"
 #include "reminder.hpp"
 
-void retirementus::set_retirement_date(eosio::name const & account, eosio::time_point const & retirement_date)
+void retirement::set_retirement_date(eosio::name const & account, eosio::time_point const & retirement_date)
 {
   authority_table authority(get_self(), get_self().value);
   eosio::check(authority.begin() != authority.end(), "Reminder can  not be set when no authority exists");
@@ -20,7 +20,7 @@ void retirementus::set_retirement_date(eosio::name const & account, eosio::time_
   }
 }
 
-void retirementus::set_birthcertusa_authority(eosio::name const & account)
+void retirement::set_birthcertusa_authority(eosio::name const & account)
 {
   require_auth(get_self());
   authority_table table(get_self(), get_self().value);

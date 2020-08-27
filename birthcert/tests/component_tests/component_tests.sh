@@ -15,15 +15,15 @@ function component_test_add_birth_certificate()
 function component_test_add_birth_certificate_wrong_authority
 {
   local start_time=$(date +%s.%3N)
-  birthcertusa=$(unit_tests_setup)
+  birthcert=$(unit_tests_setup)
   if [[ $? -ne 0 ]]
   then
-    test_fail "${FUNCNAME[0]}: Failed to set up birthcertusa contract: $result"
+    test_fail "${FUNCNAME[0]}: Failed to set up birthcert contract: $result"
     return 1
   fi
   account=$(create_random_account)
 
-  result=$( (cleos push action -f $birthcertusa add "{\"certificate_id\":1 \"account\":\"$account\", \"full_name\":\"John Doe\", \"date_of_birth\":\"1990-01-01T00:00:00\"}" -p $account) 2>&1)
+  result=$( (cleos push action -f $birthcert add "{\"certificate_id\":1 \"account\":\"$account\", \"full_name\":\"John Doe\", \"date_of_birth\":\"1990-01-01T00:00:00\"}" -p $account) 2>&1)
   if [[ $result != *"Missing required authority"* ]]
   then
     test_fail "${FUNCNAME[0]}: Unexpected error message: $result"
@@ -36,13 +36,13 @@ function component_test_add_birth_certificate_wrong_authority
 function component_test_add_birth_certificate_success
 {
   local start_time=$(date +%s.%3N)
-  birthcertusa=$(unit_tests_setup)
+  birthcert=$(unit_tests_setup)
   if [[ $? -ne 0 ]]
   then
-    test_fail "${FUNCNAME[0]}: Failed to set up birthcertusa contract: $result"
+    test_fail "${FUNCNAME[0]}: Failed to set up birthcert contract: $result"
     return 1
   fi
-  retirement_contract=$(setup_mock_retirementus_contract)
+  retirement_contract=$(setup_mock_retirement_contract)
   if [[ $? -ne 0 ]]
   then
     test_fail "${FUNCNAME[0]}: Failed to create a mock of the retirement contract"
@@ -54,21 +54,21 @@ function component_test_add_birth_certificate_success
   full_name="John Doe"
   date_of_birth="1990-01-01T00:00:00.000"
 
-  result=$( (cleos push action -f $birthcertusa mockretire "{\"account\":\"$retirement_contract\"}" -p $birthcertusa) 2>&1)
+  result=$( (cleos push action -f $birthcert mockretire "{\"account\":\"$retirement_contract\"}" -p $birthcert) 2>&1)
   if [[ $? -ne 0 ]]
   then
     test_fail "${FUNCNAME[0]}: Failed to create a mock of the certificate: $result"
     return 1
   fi
 
-  result=$( (cleos push action -f $birthcertusa add "{\"certificate_id\":$certificate_id, \"account\":\"$account\", \"full_name\":\"$full_name\", \"date_of_birth\":\"$date_of_birth\"}" -p $birthcertusa) 2>&1)
+  result=$( (cleos push action -f $birthcert add "{\"certificate_id\":$certificate_id, \"account\":\"$account\", \"full_name\":\"$full_name\", \"date_of_birth\":\"$date_of_birth\"}" -p $birthcert) 2>&1)
   if [[ $? -ne 0 ]]
   then
     test_fail "${FUNCNAME[0]}: add action failed when it should have succeeded: $result"
     return 1
   fi
 
-  certificate=$( (cleos get table $birthcertusa $birthcertusa certificates | jq -r ".rows[0]") 2>&1)
+  certificate=$( (cleos get table $birthcert $birthcert certificates | jq -r ".rows[0]") 2>&1)
   observed_certificate_id=$(echo $certificate | jq -r .certificate_id)
   observed_account=$(echo $certificate | jq -r .account)
   observed_full_name=$(echo $certificate | jq -r .full_name)
@@ -107,15 +107,15 @@ function component_test_set_retirement_contract()
 function component_test_set_retirement_contract_wrong_authority
 {
   local start_time=$(date +%s.%3N)
-  birthcertusa=$(unit_tests_setup)
+  birthcert=$(unit_tests_setup)
   if [[ $? -ne 0 ]]
   then
-    test_fail "${FUNCNAME[0]}: Failed to set up birthcertusa contract: $result"
+    test_fail "${FUNCNAME[0]}: Failed to set up birthcert contract: $result"
     return 1
   fi
   account=$(create_random_account)
 
-  result=$( (cleos push action -f $birthcertusa setretire "{\"account\":\"$account\"}" -p $account) 2>&1)
+  result=$( (cleos push action -f $birthcert setretire "{\"account\":\"$account\"}" -p $account) 2>&1)
   if [[ $result != *"Missing required authority"* ]]
   then
     test_fail "${FUNCNAME[0]}: Unexpected error message: $result"
@@ -128,22 +128,22 @@ function component_test_set_retirement_contract_wrong_authority
 function component_test_set_retirement_contract_success
 {
   local start_time=$(date +%s.%3N)
-  birthcertusa=$(unit_tests_setup)
+  birthcert=$(unit_tests_setup)
   if [[ $? -ne 0 ]]
   then
-    test_fail "${FUNCNAME[0]}: Failed to set up birthcertusa contract: $result"
+    test_fail "${FUNCNAME[0]}: Failed to set up birthcert contract: $result"
     return 1
   fi
   account=$(create_random_account)
 
-  result=$( (cleos push action -f $birthcertusa setretire "{\"account\":\"$account\"}" -p $birthcertusa) 2>&1)
+  result=$( (cleos push action -f $birthcert setretire "{\"account\":\"$account\"}" -p $birthcert) 2>&1)
   if [[ $? -ne 0 ]]
   then
     test_fail "${FUNCNAME[0]}: setretire action failed unexpectedly: $result"
     return 1
   fi
 
-  retirement_account=$(cleos get table $birthcertusa $birthcertusa retirement | jq -r ".rows[0].account")
+  retirement_account=$(cleos get table $birthcert $birthcert retirecontr | jq -r ".rows[0].account")
   if [[ $retirement_account != $account ]]
   then
     test_fail "${FUNCNAME[0]}: Expected retirement account to be \"$account\", but observed \"test_fail \"$retirement_account\""
