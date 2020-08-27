@@ -1,1 +1,5 @@
 protocol_features
+*.key
+*.log
+tests_failed
+tests_total
