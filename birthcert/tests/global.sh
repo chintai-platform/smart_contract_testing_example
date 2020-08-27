@@ -11,18 +11,6 @@ echo 0 > tests_total
 
 test_lock=./test_status.lock
 
-function create_eosio_contract()
-{
-  contract_name=$(create_random_account)
-  timeout "cleos set contract $contract_name $CHINTAIDEX_DIR/build/bin eosio.system.wasm eosio.system.abi" 20
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to set contract for eosio"
-    return 1
-  fi
-  echo $contract_name
-}
-
 clean_exit(){
   time_taken=$1
   close_nodeos
@@ -292,14 +280,6 @@ setup_system_contracts(){
   if [[ $? -ne 0 ]]
   then
     echo $result
-  fi
-
-  result=$( (cleos wallet import --private-key $private_key) 2>&1 )
-  result=$( (cleos system newaccount eosio --transfer boidcomtoken $public_key --stake-net "100000.0000 EOS" --stake-cpu "100000.0000 EOS" --buy-ram "10000 EOS") 2>&1 )
-  timeout "cleos set contract boidcomtoken $CHINTAIDEX_DIR/build/bin boidcomtoken.wasm boidcomtoken.abi" 20
-  if [[ $? -ne 0 ]]
-  then
-    echo "Failed to set contract boidcomtoken"
   fi
 }
 
